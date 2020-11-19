@@ -1,9 +1,9 @@
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false },
-    { id: cuid(), name: 'oranges', checked: false },
-    { id: cuid(), name: 'milk', checked: true },
-    { id: cuid(), name: 'bread', checked: false }
+    { id: cuid(), name: 'apples', checked: false},
+    { id: cuid(), name: 'oranges', checked: false},
+    { id: cuid(), name: 'milk', checked: true},
+    { id: cuid(), name: 'bread', checked: false}
   ],
   hideCheckedItems: false
 };
@@ -17,8 +17,14 @@ const generateItemElement = function (item) {
   }
 
   return `
+    
     <li class='js-item-element' data-item-id='${item.id}'>
       ${itemTitle}
+      <form id="js-shopping-list-form">
+    <label for="shopping-list-entry"></label>
+    <input type="text" name="shopping-list-entry" class="js-shopping-list-entry" placeholder="Edit Item Name">
+    </form>
+      <div>
       <div class='shopping-item-controls'>
         <button class='shopping-item-toggle js-item-toggle'>
           <span class='button-label'>check</span>
@@ -26,8 +32,13 @@ const generateItemElement = function (item) {
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
         </button>
+        <button class='shopping-item-edit js-item-edit'>
+          <span class='button-label'>edit</span>
+          <button class='shopping-item-change js-item-change'>
+          <span class='button-label'>change</span>
       </div>
-    </li>`;
+    </li>
+    `;
 };
 
 const generateShoppingItemsString = function (shoppingList) {
@@ -85,6 +96,28 @@ const handleItemCheckClicked = function () {
   $('.js-shopping-list').on('click', '.js-item-toggle', event => {
     const id = getItemIdFromElement(event.currentTarget);
     toggleCheckedForListItem(id);
+    render();
+  });
+};
+
+/* New functions for edit items  */
+const removeItemName = function(id) {
+   const removeItem = deleteListItem();
+  return removeItem;
+  
+};
+
+const changeItemName = function(id) {
+  const changeName = addItemToShoppingList();
+  return changeName;
+  render();
+};
+
+const handleRemoveItem = function (){
+  $('.js-shopping-list').on('click', '.js-item-edit', event => {
+    const id = getItemIdFromElement(event.currentTarget);
+    deleteListItem(id);
+    // Render the updated shopping list.
     render();
   });
 };
@@ -160,6 +193,7 @@ const handleShoppingList = function () {
   handleItemCheckClicked();
   handleDeleteItemClicked();
   handleToggleFilterClick();
+  handleRemoveItem();
 };
 
 // when the page loads, call `handleShoppingList`
